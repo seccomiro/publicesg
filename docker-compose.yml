@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: publicesg_development
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres_test:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: publicesg_test
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://postgres:password@postgres:5432/publicesg_development
+      RAILS_ENV: development
+      RAILS_MAX_THREADS: 5
+    volumes:
+      - .:/app
+      - bundle_cache:/usr/local/bundle
+    stdin_open: true
+    tty: true
+    command: >
+      bash -c "rm -f tmp/pids/server.pid &&
+               bundle exec rails db:create db:migrate &&
+               bundle exec rails server -b 0.0.0.0"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  bundle_cache:
+  redis_data:
