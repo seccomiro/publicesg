@@ -120,13 +120,13 @@ volumes:
 
 ## Week 2: Core Models & Database Schema
 
-### 2.1 User Management Models
+### 2.1 User Management Models ✅
 **Tasks:**
-- [ ] Generate and configure Devise User model
-- [ ] Add role enumeration to User model
-- [ ] Create Company/Organization model
-- [ ] Set up User-Company associations
-- [ ] Implement soft delete functionality
+- [x] Generate and configure Devise User model
+- [x] Add role enumeration to User model
+- [x] Create Company/Organization model
+- [x] Set up User-Company associations
+- [x] Implement soft delete functionality
 
 **User Model (`app/models/user.rb`):**
 ```ruby
