@@ -88,7 +88,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     ports:
-      - "5432:5432"
+      - "5436:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -99,7 +99,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
     ports:
-      - "5433:5432"
+      - "5437:5432"
 
   web:
     build: .
@@ -108,7 +108,7 @@ services:
     depends_on:
       - postgres
     environment:
-      DATABASE_URL: postgresql://postgres:password@postgres:5432/publicesg_development
+      DATABASE_URL: postgresql://postgres:password@postgres:5436/publicesg_development
     volumes:
       - .:/app
       - bundle_cache:/usr/local/bundle
@@ -434,10 +434,10 @@ module PublicesgPlatform
   class Application < Rails::Application
     config.api_only = true
     config.load_defaults 7.1
-    
+
     # Security headers
     config.force_ssl = Rails.env.production?
-    
+
     # CORS configuration
     config.middleware.insert_before 0, Rack::Cors do
       allow do
@@ -533,10 +533,10 @@ end
 ```ruby
 class Api::V1::BaseController < ApplicationController
   include Pundit::Authorization
-  
+
   before_action :authenticate_user!
   before_action :set_current_company
-  
+
   rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
   rescue_from ActiveRecord::RecordInvalid, with: :unprocessable_entity
@@ -556,9 +556,9 @@ class Api::V1::BaseController < ApplicationController
   end
 
   def unprocessable_entity(exception)
-    render json: { 
-      error: 'Validation failed', 
-      details: exception.record.errors.full_messages 
+    render json: {
+      error: 'Validation failed',
+      details: exception.record.errors.full_messages
     }, status: :unprocessable_entity
   end
 end

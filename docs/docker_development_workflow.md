@@ -20,8 +20,8 @@
 
 4. **Access the application**
    - Rails application: http://localhost:3000
-   - PostgreSQL: localhost:5432
-   - PostgreSQL Test DB: localhost:5433
+   - PostgreSQL: localhost:5436
+   - PostgreSQL Test DB: localhost:5437
    - Redis: localhost:6379
 
 ## Docker Commands
@@ -96,7 +96,7 @@ docker compose exec web rails db:reset
    docker compose up
    ```
 
-4. **Running Tests**: Tests use a separate PostgreSQL instance on port 5433:
+4. **Running Tests**: Tests use a separate PostgreSQL instance on port 5437:
    ```bash
    docker compose exec web rspec
    ```
@@ -114,8 +114,8 @@ If you get port conflict errors, check if services are already running:
 # Check what's using port 3000
 lsof -i :3000
 
-# Check what's using port 5432
-lsof -i :5432
+# Check what's using port 5436
+lsof -i :5436
 ```
 
 ### Database connection issues
@@ -146,7 +146,7 @@ Key environment variables used in Docker:
 - `RAILS_ENV`: Rails environment (development/test/production)
 - `RAILS_MAX_THREADS`: Number of threads for Puma
 - `DATABASE_HOST`: Database host (postgres in Docker)
-- `DATABASE_PORT`: Database port (5432)
+- `DATABASE_PORT`: Database port (5436)
 - `DATABASE_USERNAME`: Database username (postgres)
 - `DATABASE_PASSWORD`: Database password
 
